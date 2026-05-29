@@ -1,8 +1,8 @@
-ARG GO_VER=1.22
+ARG GO_VER=1.25.10
 ARG GO_ARCH=alpine
 
 ARG INSTALL_KUBECTL=true
-ARG KUBECTL_VER=1.29.1
+ARG KUBECTL_VER=1.35.5
 
 ARG INSTALL_KUBEBUILDER=false
 ARG KUBEBUILDER_VER=3.10.0
@@ -16,14 +16,14 @@ FROM golang:${GO_VER}-${GO_ARCH}
 
 
 # Install Golang extension package tools
-RUN go install github.com/ramya-rao-a/go-outline@latest         && \
-    go install github.com/cweill/gotests/gotests@latest         && \
-    go install github.com/fatih/gomodifytags@latest             && \
-    go install github.com/josharian/impl@latest                 && \
-    go install github.com/haya14busa/goplay/cmd/goplay@latest   && \
-    go install github.com/go-delve/delve/cmd/dlv@latest         && \
-    go install honnef.co/go/tools/cmd/staticcheck@latest        && \
-    go install golang.org/x/tools/gopls@latest
+RUN go install github.com/ramya-rao-a/go-outline@1.0.0         && \
+    go install github.com/cweill/gotests/gotests@v1.9.0        && \
+    go install github.com/fatih/gomodifytags@v1.17.0           && \
+    go install github.com/josharian/impl@v1.5.0                && \
+    go install github.com/haya14busa/goplay/cmd/goplay@v1.0.0  && \
+    go install github.com/go-delve/delve/cmd/dlv@v1.26.3       && \
+    go install golang.org/x/tools/gopls@v0.21.1                && \
+    go install honnef.co/go/tools/cmd/staticcheck@v0.7.0
 
 ARG GO_ARCH
 RUN if [ "${GO_ARCH}" == "alpine" ]; then \
@@ -80,11 +80,11 @@ RUN if [ "${INSTALL_KUBEBUILDER}" == "true" ]; then \
 
 
 # Install k8s code generator
-RUN go install k8s.io/code-generator/cmd/client-gen@v0.29.2     && \
-    go install k8s.io/code-generator/cmd/deepcopy-gen@v0.29.2   && \
-    go install k8s.io/code-generator/cmd/register-gen@v0.29.2   && \
-    go install k8s.io/code-generator/cmd/lister-gen@v0.29.2     && \
-    go install k8s.io/code-generator/cmd/informer-gen@v0.29.2
+RUN go install k8s.io/code-generator/cmd/client-gen@v0.35.5     && \
+    go install k8s.io/code-generator/cmd/deepcopy-gen@v0.35.5   && \
+    go install k8s.io/code-generator/cmd/register-gen@v0.35.5   && \
+    go install k8s.io/code-generator/cmd/lister-gen@v0.35.5     && \
+    go install k8s.io/code-generator/cmd/informer-gen@v0.35.5
 
 
 # Install required dependencies from go.mod file

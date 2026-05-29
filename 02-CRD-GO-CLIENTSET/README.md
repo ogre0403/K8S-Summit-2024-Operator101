@@ -158,11 +158,11 @@ cd /workspaces/K8S-Summit-2024-Operator101/02-CRD-GO-CLIENTSET/${BASE_PATH}
 cat << EOF > go.mod
 module web-crd
 
-go 1.22
+go 1.25
 
 require (
-	k8s.io/apimachinery v0.29.2
-	k8s.io/client-go v0.29.2
+	k8s.io/apimachinery v0.35.5
+	k8s.io/client-go v0.35.5
 )
 EOF
 ```

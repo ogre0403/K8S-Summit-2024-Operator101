@@ -2,15 +2,21 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.205.2/containers/alpine
 {
 	"name": "k8s-summit-2024",
-	"image": "k8s-summit:latest",
+	// "image": "k8s-summit:latest",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "..",
+	},
+
 
 	"customizations":{
 		"vscode": {
 			"extensions": [
 				"golang.Go",
-				"GitHub.copilot",
 				"isudox.vscode-jetbrains-keybindings",
-				"fcrespo82.markdown-table-formatter"
+				"fcrespo82.markdown-table-formatter",
+				// "vtkn.amazon-bedrock-copilot-chat",
+				// "openai.chatgpt",
 			]
 		}
 	},

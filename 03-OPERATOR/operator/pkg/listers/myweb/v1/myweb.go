@@ -3,7 +3,7 @@
 package v1
 
 import (
-	mywebv1 "web-crd/pkg/apis/myweb/v1"
+	mywebv1 "operator/pkg/apis/myweb/v1"
 
 	labels "k8s.io/apimachinery/pkg/labels"
 	listers "k8s.io/client-go/listers"

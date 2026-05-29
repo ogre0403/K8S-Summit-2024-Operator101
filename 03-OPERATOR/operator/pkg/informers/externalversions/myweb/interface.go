@@ -3,8 +3,8 @@
 package myweb
 
 import (
-	internalinterfaces "web-crd/pkg/informers/externalversions/internalinterfaces"
-	v1 "web-crd/pkg/informers/externalversions/myweb/v1"
+	internalinterfaces "operator/pkg/informers/externalversions/internalinterfaces"
+	v1 "operator/pkg/informers/externalversions/myweb/v1"
 )
 
 // Interface provides access to each of this group's versions.

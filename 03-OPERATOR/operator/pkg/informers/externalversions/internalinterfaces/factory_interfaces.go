@@ -3,8 +3,8 @@
 package internalinterfaces
 
 import (
+	clientset "operator/pkg/clientset"
 	time "time"
-	clientset "web-crd/pkg/clientset"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"

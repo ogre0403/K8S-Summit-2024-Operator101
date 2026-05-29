@@ -3,12 +3,12 @@
 package externalversions
 
 import (
+	clientset "operator/pkg/clientset"
+	internalinterfaces "operator/pkg/informers/externalversions/internalinterfaces"
+	myweb "operator/pkg/informers/externalversions/myweb"
 	reflect "reflect"
 	sync "sync"
 	time "time"
-	clientset "web-crd/pkg/clientset"
-	internalinterfaces "web-crd/pkg/informers/externalversions/internalinterfaces"
-	myweb "web-crd/pkg/informers/externalversions/myweb"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"

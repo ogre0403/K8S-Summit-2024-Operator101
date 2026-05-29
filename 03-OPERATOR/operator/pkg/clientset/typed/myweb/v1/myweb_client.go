@@ -4,8 +4,8 @@ package v1
 
 import (
 	http "net/http"
-	mywebv1 "web-crd/pkg/apis/myweb/v1"
-	scheme "web-crd/pkg/clientset/scheme"
+	mywebv1 "operator/pkg/apis/myweb/v1"
+	scheme "operator/pkg/clientset/scheme"
 
 	rest "k8s.io/client-go/rest"
 )

@@ -3,7 +3,7 @@
 package fake
 
 import (
-	v1 "web-crd/pkg/clientset/typed/myweb/v1"
+	v1 "operator/pkg/clientset/typed/myweb/v1"
 
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"

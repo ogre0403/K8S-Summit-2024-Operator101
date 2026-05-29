@@ -4,7 +4,7 @@ package externalversions
 
 import (
 	fmt "fmt"
-	v1 "web-crd/pkg/apis/myweb/v1"
+	v1 "operator/pkg/apis/myweb/v1"
 
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"

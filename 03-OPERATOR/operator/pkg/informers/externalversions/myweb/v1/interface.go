@@ -3,7 +3,7 @@
 package v1
 
 import (
-	internalinterfaces "web-crd/pkg/informers/externalversions/internalinterfaces"
+	internalinterfaces "operator/pkg/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to all the informers in this group version.

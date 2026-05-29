@@ -4,8 +4,8 @@ package v1
 
 import (
 	context "context"
-	mywebv1 "web-crd/pkg/apis/myweb/v1"
-	scheme "web-crd/pkg/clientset/scheme"
+	mywebv1 "operator/pkg/apis/myweb/v1"
+	scheme "operator/pkg/clientset/scheme"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"

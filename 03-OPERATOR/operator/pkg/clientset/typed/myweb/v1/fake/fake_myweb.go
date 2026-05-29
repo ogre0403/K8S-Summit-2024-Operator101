@@ -3,8 +3,8 @@
 package fake
 
 import (
-	v1 "web-crd/pkg/apis/myweb/v1"
-	mywebv1 "web-crd/pkg/clientset/typed/myweb/v1"
+	v1 "operator/pkg/apis/myweb/v1"
+	mywebv1 "operator/pkg/clientset/typed/myweb/v1"
 
 	gentype "k8s.io/client-go/gentype"
 )

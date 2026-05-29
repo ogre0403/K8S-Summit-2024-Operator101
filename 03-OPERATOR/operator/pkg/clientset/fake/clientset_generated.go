@@ -3,9 +3,9 @@
 package fake
 
 import (
-	clientset "web-crd/pkg/clientset"
-	operatorv1 "web-crd/pkg/clientset/typed/myweb/v1"
-	fakeoperatorv1 "web-crd/pkg/clientset/typed/myweb/v1/fake"
+	clientset "operator/pkg/clientset"
+	operatorv1 "operator/pkg/clientset/typed/myweb/v1"
+	fakeoperatorv1 "operator/pkg/clientset/typed/myweb/v1/fake"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"

@@ -5,7 +5,7 @@ package clientset
 import (
 	fmt "fmt"
 	http "net/http"
-	operatorv1 "web-crd/pkg/clientset/typed/myweb/v1"
+	operatorv1 "operator/pkg/clientset/typed/myweb/v1"
 
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"

@@ -4,11 +4,11 @@ package v1
 
 import (
 	context "context"
+	apismywebv1 "operator/pkg/apis/myweb/v1"
+	clientset "operator/pkg/clientset"
+	internalinterfaces "operator/pkg/informers/externalversions/internalinterfaces"
+	mywebv1 "operator/pkg/listers/myweb/v1"
 	time "time"
-	apismywebv1 "web-crd/pkg/apis/myweb/v1"
-	clientset "web-crd/pkg/clientset"
-	internalinterfaces "web-crd/pkg/informers/externalversions/internalinterfaces"
-	mywebv1 "web-crd/pkg/listers/myweb/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"

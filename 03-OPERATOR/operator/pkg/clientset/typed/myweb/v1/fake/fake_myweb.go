@@ -3,123 +3,31 @@
 package fake
 
 import (
-	"context"
-	v1 "operator/pkg/apis/myweb/v1"
+	v1 "web-crd/pkg/apis/myweb/v1"
+	mywebv1 "web-crd/pkg/clientset/typed/myweb/v1"
 
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	labels "k8s.io/apimachinery/pkg/labels"
-	types "k8s.io/apimachinery/pkg/types"
-	watch "k8s.io/apimachinery/pkg/watch"
-	testing "k8s.io/client-go/testing"
+	gentype "k8s.io/client-go/gentype"
 )
 
-// FakeMyWebs implements MyWebInterface
-type FakeMyWebs struct {
+// fakeMyWebs implements MyWebInterface
+type fakeMyWebs struct {
+	*gentype.FakeClientWithList[*v1.MyWeb, *v1.MyWebList]
 	Fake *FakeOperatorV1
-	ns   string
 }
 
-var mywebsResource = v1.SchemeGroupVersion.WithResource("mywebs")
-
-var mywebsKind = v1.SchemeGroupVersion.WithKind("MyWeb")
-
-// Get takes name of the myWeb, and returns the corresponding myWeb object, and an error if there is any.
-func (c *FakeMyWebs) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v1.MyWeb, err error) {
-	obj, err := c.Fake.
-		Invokes(testing.NewGetAction(mywebsResource, c.ns, name), &v1.MyWeb{})
-
-	if obj == nil {
-		return nil, err
+func newFakeMyWebs(fake *FakeOperatorV1, namespace string) mywebv1.MyWebInterface {
+	return &fakeMyWebs{
+		gentype.NewFakeClientWithList[*v1.MyWeb, *v1.MyWebList](
+			fake.Fake,
+			namespace,
+			v1.SchemeGroupVersion.WithResource("mywebs"),
+			v1.SchemeGroupVersion.WithKind("MyWeb"),
+			func() *v1.MyWeb { return &v1.MyWeb{} },
+			func() *v1.MyWebList { return &v1.MyWebList{} },
+			func(dst, src *v1.MyWebList) { dst.ListMeta = src.ListMeta },
+			func(list *v1.MyWebList) []*v1.MyWeb { return gentype.ToPointerSlice(list.Items) },
+			func(list *v1.MyWebList, items []*v1.MyWeb) { list.Items = gentype.FromPointerSlice(items) },
+		),
+		fake,
 	}
-	return obj.(*v1.MyWeb), err
-}
-
-// List takes label and field selectors, and returns the list of MyWebs that match those selectors.
-func (c *FakeMyWebs) List(ctx context.Context, opts metav1.ListOptions) (result *v1.MyWebList, err error) {
-	obj, err := c.Fake.
-		Invokes(testing.NewListAction(mywebsResource, mywebsKind, c.ns, opts), &v1.MyWebList{})
-
-	if obj == nil {
-		return nil, err
-	}
-
-	label, _, _ := testing.ExtractFromListOptions(opts)
-	if label == nil {
-		label = labels.Everything()
-	}
-	list := &v1.MyWebList{ListMeta: obj.(*v1.MyWebList).ListMeta}
-	for _, item := range obj.(*v1.MyWebList).Items {
-		if label.Matches(labels.Set(item.Labels)) {
-			list.Items = append(list.Items, item)
-		}
-	}
-	return list, err
-}
-
-// Watch returns a watch.Interface that watches the requested myWebs.
-func (c *FakeMyWebs) Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error) {
-	return c.Fake.
-		InvokesWatch(testing.NewWatchAction(mywebsResource, c.ns, opts))
-
-}
-
-// Create takes the representation of a myWeb and creates it.  Returns the server's representation of the myWeb, and an error, if there is any.
-func (c *FakeMyWebs) Create(ctx context.Context, myWeb *v1.MyWeb, opts metav1.CreateOptions) (result *v1.MyWeb, err error) {
-	obj, err := c.Fake.
-		Invokes(testing.NewCreateAction(mywebsResource, c.ns, myWeb), &v1.MyWeb{})
-
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*v1.MyWeb), err
-}
-
-// Update takes the representation of a myWeb and updates it. Returns the server's representation of the myWeb, and an error, if there is any.
-func (c *FakeMyWebs) Update(ctx context.Context, myWeb *v1.MyWeb, opts metav1.UpdateOptions) (result *v1.MyWeb, err error) {
-	obj, err := c.Fake.
-		Invokes(testing.NewUpdateAction(mywebsResource, c.ns, myWeb), &v1.MyWeb{})
-
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*v1.MyWeb), err
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *FakeMyWebs) UpdateStatus(ctx context.Context, myWeb *v1.MyWeb, opts metav1.UpdateOptions) (*v1.MyWeb, error) {
-	obj, err := c.Fake.
-		Invokes(testing.NewUpdateSubresourceAction(mywebsResource, "status", c.ns, myWeb), &v1.MyWeb{})
-
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*v1.MyWeb), err
-}
-
-// Delete takes name of the myWeb and deletes it. Returns an error if one occurs.
-func (c *FakeMyWebs) Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error {
-	_, err := c.Fake.
-		Invokes(testing.NewDeleteActionWithOptions(mywebsResource, c.ns, name, opts), &v1.MyWeb{})
-
-	return err
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *FakeMyWebs) DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error {
-	action := testing.NewDeleteCollectionAction(mywebsResource, c.ns, listOpts)
-
-	_, err := c.Fake.Invokes(action, &v1.MyWebList{})
-	return err
-}
-
-// Patch applies the patch and returns the patched myWeb.
-func (c *FakeMyWebs) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.MyWeb, err error) {
-	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(mywebsResource, c.ns, name, pt, data, subresources...), &v1.MyWeb{})
-
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*v1.MyWeb), err
 }

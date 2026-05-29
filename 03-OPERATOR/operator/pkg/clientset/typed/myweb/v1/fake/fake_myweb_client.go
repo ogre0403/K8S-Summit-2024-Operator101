@@ -3,7 +3,7 @@
 package fake
 
 import (
-	v1 "operator/pkg/clientset/typed/myweb/v1"
+	v1 "web-crd/pkg/clientset/typed/myweb/v1"
 
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
@@ -14,7 +14,7 @@ type FakeOperatorV1 struct {
 }
 
 func (c *FakeOperatorV1) MyWebs(namespace string) v1.MyWebInterface {
-	return &FakeMyWebs{c, namespace}
+	return newFakeMyWebs(c, namespace)
 }
 
 // RESTClient returns a RESTClient that is used to communicate

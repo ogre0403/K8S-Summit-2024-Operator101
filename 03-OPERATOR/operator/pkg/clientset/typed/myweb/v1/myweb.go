@@ -3,15 +3,14 @@
 package v1
 
 import (
-	"context"
-	v1 "operator/pkg/apis/myweb/v1"
-	scheme "operator/pkg/clientset/scheme"
-	"time"
+	context "context"
+	mywebv1 "web-crd/pkg/apis/myweb/v1"
+	scheme "web-crd/pkg/clientset/scheme"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // MyWebsGetter has a method to return a MyWebInterface.
@@ -22,158 +21,34 @@ type MyWebsGetter interface {
 
 // MyWebInterface has methods to work with MyWeb resources.
 type MyWebInterface interface {
-	Create(ctx context.Context, myWeb *v1.MyWeb, opts metav1.CreateOptions) (*v1.MyWeb, error)
-	Update(ctx context.Context, myWeb *v1.MyWeb, opts metav1.UpdateOptions) (*v1.MyWeb, error)
-	UpdateStatus(ctx context.Context, myWeb *v1.MyWeb, opts metav1.UpdateOptions) (*v1.MyWeb, error)
+	Create(ctx context.Context, myWeb *mywebv1.MyWeb, opts metav1.CreateOptions) (*mywebv1.MyWeb, error)
+	Update(ctx context.Context, myWeb *mywebv1.MyWeb, opts metav1.UpdateOptions) (*mywebv1.MyWeb, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, myWeb *mywebv1.MyWeb, opts metav1.UpdateOptions) (*mywebv1.MyWeb, error)
 	Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error
-	Get(ctx context.Context, name string, opts metav1.GetOptions) (*v1.MyWeb, error)
-	List(ctx context.Context, opts metav1.ListOptions) (*v1.MyWebList, error)
+	Get(ctx context.Context, name string, opts metav1.GetOptions) (*mywebv1.MyWeb, error)
+	List(ctx context.Context, opts metav1.ListOptions) (*mywebv1.MyWebList, error)
 	Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.MyWeb, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *mywebv1.MyWeb, err error)
 	MyWebExpansion
 }
 
 // myWebs implements MyWebInterface
 type myWebs struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*mywebv1.MyWeb, *mywebv1.MyWebList]
 }
 
 // newMyWebs returns a MyWebs
 func newMyWebs(c *OperatorV1Client, namespace string) *myWebs {
 	return &myWebs{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*mywebv1.MyWeb, *mywebv1.MyWebList](
+			"mywebs",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *mywebv1.MyWeb { return &mywebv1.MyWeb{} },
+			func() *mywebv1.MyWebList { return &mywebv1.MyWebList{} },
+		),
 	}
-}
-
-// Get takes name of the myWeb, and returns the corresponding myWeb object, and an error if there is any.
-func (c *myWebs) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v1.MyWeb, err error) {
-	result = &v1.MyWeb{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mywebs").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of MyWebs that match those selectors.
-func (c *myWebs) List(ctx context.Context, opts metav1.ListOptions) (result *v1.MyWebList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1.MyWebList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mywebs").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested myWebs.
-func (c *myWebs) Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("mywebs").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a myWeb and creates it.  Returns the server's representation of the myWeb, and an error, if there is any.
-func (c *myWebs) Create(ctx context.Context, myWeb *v1.MyWeb, opts metav1.CreateOptions) (result *v1.MyWeb, err error) {
-	result = &v1.MyWeb{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("mywebs").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(myWeb).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a myWeb and updates it. Returns the server's representation of the myWeb, and an error, if there is any.
-func (c *myWebs) Update(ctx context.Context, myWeb *v1.MyWeb, opts metav1.UpdateOptions) (result *v1.MyWeb, err error) {
-	result = &v1.MyWeb{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mywebs").
-		Name(myWeb.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(myWeb).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *myWebs) UpdateStatus(ctx context.Context, myWeb *v1.MyWeb, opts metav1.UpdateOptions) (result *v1.MyWeb, err error) {
-	result = &v1.MyWeb{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mywebs").
-		Name(myWeb.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(myWeb).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the myWeb and deletes it. Returns an error if one occurs.
-func (c *myWebs) Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mywebs").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *myWebs) DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mywebs").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched myWeb.
-func (c *myWebs) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.MyWeb, err error) {
-	result = &v1.MyWeb{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("mywebs").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }
